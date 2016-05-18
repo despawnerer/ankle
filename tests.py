@@ -74,3 +74,30 @@ class MatchTest(unittest.TestCase):
         self.assertEqual(len(matches), 2)
         self.assertEqual(matches[0].attrib['id'], 'test1')
         self.assertEqual(matches[1].attrib['id'], 'test2')
+
+    def test_attribute_order_doesnt_matter(self):
+        document = '<form method="POST" action="." id="test1"></form>'
+        skeleton = '<form id="test1" action="." method="POST"></form>'
+        matches = ankle.match(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_match_deep_descendants(self):
+        document = '''
+            <form id="test1">
+                <div class="red">
+                    <input name="wonderful">
+                </div>
+            </form>
+            <form id="test2">
+                <div class="red">
+                    <input name="different">
+                </div>
+            </form>
+        '''
+        skeleton = (
+            '<form><div class="red"><input name="wonderful"></form></div>'
+        )
+        matches = ankle.match(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
