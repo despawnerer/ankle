@@ -6,7 +6,7 @@ ankle
 
 `ankle` is a tool that finds elements inside HTML documents by comparing them with an HTML skeleton. It is most useful for testing markup returned by a server.
 
-Definitely works on Python 2.7 and Python 3.4+.
+Works on Python 2.7 and Python 3.4+.
 
 
 Installation
