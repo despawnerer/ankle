@@ -5,6 +5,7 @@ Version 0.2.0
 -------------
 
 - Add support for checking node text in skeletons
+- Replace `match` with `find`, `find_all` and `find_iter` interfaces
 
 Version 0.1.0
 -------------

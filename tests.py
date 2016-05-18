@@ -2,13 +2,29 @@ import ankle
 import unittest
 
 
-class MatchTest(unittest.TestCase):
+class FindTestCase(unittest.TestCase):
+    def test_returns_first_found_element_when_found(self):
+        document = '''
+            <form id="test1" class="form"></form>
+            <form id="test2" class="form"></form>
+        '''
+        skeleton = '<form class="form"></form>'
+        element = ankle.find(skeleton, document)
+        self.assertEqual(element.attrib['id'], 'test1')
+
+    def test_returns_none_when_nothing_found(self):
+        document = '<form id="test"></form>'
+        skeleton = '<div class="other"></div>'
+        self.assertIsNone(ankle.find(skeleton, document))
+
+
+class MatchingTestCase(unittest.TestCase):
     def test_match_by_tag_name(self):
         document = '''
             <form id="test"></form>
         '''
         skeleton = '<form></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test')
 
@@ -18,7 +34,7 @@ class MatchTest(unittest.TestCase):
             <form id="test2"></form>
         '''
         skeleton = '<form id="test1"></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
 
@@ -28,7 +44,7 @@ class MatchTest(unittest.TestCase):
             <form id="test2"><input name="no-match"></form>
         '''
         skeleton = '<form><input name="match"></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
 
@@ -44,7 +60,7 @@ class MatchTest(unittest.TestCase):
             </form>
         '''
         skeleton = '<form><input name="match"></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
 
@@ -60,7 +76,7 @@ class MatchTest(unittest.TestCase):
             </form>
         '''
         skeleton = '<form><input name="name"><input name="password"></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'login')
 
@@ -70,7 +86,7 @@ class MatchTest(unittest.TestCase):
             <form id="test2"></form>
         '''
         skeleton = '<form></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 2)
         self.assertEqual(matches[0].attrib['id'], 'test1')
         self.assertEqual(matches[1].attrib['id'], 'test2')
@@ -78,7 +94,7 @@ class MatchTest(unittest.TestCase):
     def test_attribute_order_doesnt_matter(self):
         document = '<form method="POST" action="." id="test1"></form>'
         skeleton = '<form id="test1" action="." method="POST"></form>'
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
 
@@ -98,7 +114,7 @@ class MatchTest(unittest.TestCase):
         skeleton = (
             '<form><div class="red"><input name="wonderful"></form></div>'
         )
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
 
@@ -123,6 +139,6 @@ class MatchTest(unittest.TestCase):
                 <input name="name">
             </form>
         '''
-        matches = ankle.match(skeleton, document)
+        matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')

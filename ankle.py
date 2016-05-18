@@ -1,13 +1,36 @@
+import warnings
 from lxml.html import html5parser
 from six import string_types
+from functools import wraps
 
 
-__all__ = ['match']
+__all__ = ['find', 'find_all', 'find_iter']
 
 
-def match(skeleton, document):
+def find(skeleton, document):
     """
-    Return elements from document that match given skeleton.
+    Return first element from document that matches given skeleton.
+    """
+    return next(find_iter(skeleton, document), None)
+
+
+def find_all(skeleton, document):
+    """
+    Return all elements from document that match given skeleton.
+    """
+    return list(find_iter(skeleton, document))
+
+
+@wraps(find_all)
+def match(skeleton, document):
+    warnings.warn("match is deprecated, use find_all instead")
+    return find_all(skeleton, document)
+
+
+def find_iter(skeleton, document):
+    """
+    Return an iterator yielding elements from document
+    that match given skeleton.
 
     Each element in skeleton is matched by tag name and attributes.
     Children of nodes in skeleton are checked as descendants of
@@ -21,11 +44,9 @@ def match(skeleton, document):
         skeleton = html5parser.fragment_fromstring(skeleton)
 
     bones = skeleton.getchildren()
-    matches = []
     for element in find_bone_like_descendants(skeleton, document):
         if match_bones(bones, element) is not None:
-            matches.append(element)
-    return matches
+            yield element
 
 
 def match_bones(bones, element):
