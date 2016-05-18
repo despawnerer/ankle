@@ -32,10 +32,11 @@ Document and skeleton may be either HTML strings or a parsed etrees.
 Caveats
 -------
 
-These would be nice to have, but are currently not implemented:
+These features are currently not implemented:
 
 - Order of elements isn't checked
 - Text within elements isn't checked
+- Class attribute is checked by strict equality, but it may be desirable to ignore classes that aren't present in the skeleton
 
 
 Example
