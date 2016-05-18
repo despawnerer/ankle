@@ -6,6 +6,8 @@ ankle
 
 `ankle` is a tool to find matches inside HTML documents based on an HTML skeleton. It is most useful for testing markup returned by a server.
 
+Definitely works on Python 2.7 and Python 3.4+.
+
 
 Installation
 ------------
@@ -25,6 +27,15 @@ Return elements from document that match given skeleton.
 Each element in skeleton is matched by tag name and attributes. Children of nodes in skeleton are checked as descendants of elements in the document.
 
 Document and skeleton may be either HTML strings or a parsed etrees.
+
+
+Caveats
+-------
+
+These would be nice to have, but are currently not implemented:
+
+- Order of elements isn't checked
+- Text within elements isn't checked
 
 
 Example
