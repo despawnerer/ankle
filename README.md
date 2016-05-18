@@ -4,7 +4,7 @@ ankle
 [![Build Status](https://travis-ci.org/despawnerer/ankle.svg?branch=master)](https://travis-ci.org/despawnerer/ankle)
 [![PyPI version](https://badge.fury.io/py/ankle.svg)](https://badge.fury.io/py/ankle)
 
-`ankle` is a tool to find matches inside HTML documents based on an HTML skeleton. It is most useful for testing markup returned by a server.
+`ankle` is a tool that finds elements inside HTML documents by comparing them with an HTML skeleton. It is most useful for testing markup returned by a server.
 
 Definitely works on Python 2.7 and Python 3.4+.
 
