@@ -32,11 +32,15 @@ def find_iter(skeleton, document):
     Return an iterator yielding elements from document
     that match given skeleton.
 
-    Each element in skeleton is matched by tag name and attributes.
-    Children of nodes in skeleton are checked as descendants of
+    Elements from the skeleton are matched with document's by tag name,
+    attributes and text inside them.
+
+    Children of elements in skeleton are matched to descendants of
     elements in the document.
 
-    Document and skeleton may be either HTML strings or a parsed etrees.
+    Skeleton may only contain one root element.
+
+    `document` and `skeleton` may be either HTML strings or parsed etrees.
     """
     if isinstance(document, string_types):
         document = html5parser.document_fromstring(document)

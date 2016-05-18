@@ -19,14 +19,32 @@ Usage
 -----
 
 ```python
-ankle.match(skeleton, document)
+ankle.find_all(skeleton, document)
 ```
 
 Return elements from document that match given skeleton.
 
-Each element in skeleton is matched by tag name and attributes. Children of nodes in skeleton are checked as descendants of elements in the document.
+Elements from the skeleton are matched with document's by tag name, attributes and text inside them.
 
-Document and skeleton may be either HTML strings or a parsed etrees.
+Children of elements in skeleton are matched to descendants of the respective elements in the document.
+
+Skeleton may only contain one root element.
+
+`document` and `skeleton` may be either HTML strings or parsed etrees.
+
+
+```python
+ankle.find(skeleton, document)
+```
+
+Return the first element that matches given skeleton in the document.
+
+
+```python
+ankle.find_iter(skeleton, document)
+```
+
+Return an iterator that yields matching elements from the document. See `find_all` for details.
 
 
 Caveats
@@ -35,7 +53,7 @@ Caveats
 These features are currently not implemented:
 
 - Order of elements isn't checked
-- Text within elements isn't checked
+- Text between elements isn't checked
 - Class attribute is checked by strict equality, but it may be desirable to ignore classes that aren't present in the skeleton
 
 
@@ -71,5 +89,5 @@ skeleton = """
 </form>
 """
 
-ankle.match(skeleton, document)  # will return a list with one element: the form in the document
+ankle.find(skeleton, document)  # will return the <form> element from the document
 ```
