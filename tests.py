@@ -101,3 +101,28 @@ class MatchTest(unittest.TestCase):
         matches = ankle.match(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_match_text(self):
+        document = '''
+            <form id="test1">
+                <label for="name">
+                    Correct label
+                </label>
+                <input name="name">
+            </form>
+            <form id="test2">
+                <label for="name">
+                    Wrong label
+                </label>
+                <input name="name">
+            </form>
+        '''
+        skeleton = '''
+            <form>
+                <label for="name">Correct label</label>
+                <input name="name">
+            </form>
+        '''
+        matches = ankle.match(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')

@@ -47,4 +47,14 @@ def find_bone_like_descendants(bone, parent):
         for attr, value in bone.attrib.items()
     )
     path = './/{tag}{attrs}'.format(tag=bone.tag, attrs=attrs_path)
-    return parent.findall(path)
+    elements = parent.findall(path)
+
+    text = stripped(bone.text)
+    if text:
+        elements = [e for e in elements if stripped(e.text) == text]
+
+    return elements
+
+
+def stripped(text):
+    return text and text.strip()
