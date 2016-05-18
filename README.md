@@ -72,6 +72,7 @@ document = """
 		</p>
 		<form id="subscription-form">
 			<div>
+				<label for="email">Email</label>
 				<input name="email" placeholder="Email"/>
 			</div>
 			<div>
@@ -84,6 +85,7 @@ document = """
 
 skeleton = """
 <form>
+	<label for="email">Email</label>
 	<input name="email">
 	<button type="submit"></button>
 </form>
