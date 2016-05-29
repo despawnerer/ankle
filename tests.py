@@ -186,3 +186,51 @@ class MatchingTestCase(unittest.TestCase):
         matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_match_text_between_elements(self):
+        document = '''
+            <form id="test1">
+                <label for="name">Label</label>
+                Correct text
+                <input name="name">
+            </form>
+            <form id="test2">
+                <label for="name">Label</label>
+                Incorrect text
+                <input name="name">
+            </form>
+        '''
+        skeleton = '''
+            <form>
+                <label for="name">Label</label>
+                Correct text
+                <input name="name">
+            </form>
+        '''
+        matches = ankle.find_all(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_match_text_in_the_beginning_of_element(self):
+        document = '''
+            <form id="test1">
+                Correct text
+                <label for="name">Label</label>
+                <input name="name">
+            </form>
+            <form id="test2">
+                Incorrect text
+                <label for="name">Label</label>
+                <input name="name">
+            </form>
+        '''
+        skeleton = '''
+            <form>
+                Correct text
+                <label for="name">Label</label>
+                <input name="name">
+            </form>
+        '''
+        matches = ankle.find_all(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
