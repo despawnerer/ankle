@@ -16,6 +16,9 @@ def has_all_matching_elements(element, bone_list):
     if not bone_list:
         return True
 
+    # this is sort of convoluted in comparison with recursive version, but:
+    # - easy to break out once we've found all the matching elements
+    # - no possibility of recursion errors (documents may be very large)
     bones_iter = iter(bone_list)
     nodes_iters = [iter_child_nodes(element)]
     bone = next(bones_iter)
