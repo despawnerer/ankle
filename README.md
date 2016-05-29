@@ -58,7 +58,7 @@ Caveats
 -------
 
 - Class attribute is checked by strict equality, but it may be desirable to ignore classes that aren't present in the skeleton
-- Text inside and between elements is checked strictly, so, for example, if it's broken up by a <span> in the document, but presented without it in the skeleton, it won't be found
+- Text inside and between elements is checked strictly, so, for example, if it's broken up by a \<span\> in the document, but presented without it in the skeleton, it won't be found
 - There are no nice assertion failure messages when using in py.test so it's difficult to see what failed to match and why
 
 
