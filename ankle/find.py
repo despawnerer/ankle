@@ -9,7 +9,7 @@ __all__ = ['find', 'find_all', 'find_iter']
 
 def find(skeleton, document):
     """
-    Return first element from document that matches given skeleton.
+    Return the first element that matches given skeleton in the document.
     """
     return next(find_iter(skeleton, document), None)
 
@@ -17,24 +17,28 @@ def find(skeleton, document):
 def find_all(skeleton, document):
     """
     Return all elements from document that match given skeleton.
+
+    Skeleton elements are compared with the document's by tag name,
+    attributes and text inside or between them.
+
+    Children of elements in the skeleton are looked for in the descendants of
+    matching elements in the document.
+
+    Order of elements in the skeleton is signficant.
+
+    Skeleton must contain one root element.
+
+    `document` and `skeleton` may be either HTML strings or parsed etrees.
     """
     return list(find_iter(skeleton, document))
 
 
 def find_iter(skeleton, document):
     """
-    Return an iterator yielding elements from document
-    that match given skeleton.
+    Return an iterator that yields elements from the document that
+    match given skeleton.
 
-    Elements from the skeleton are matched with document's by tag name,
-    attributes and text inside them.
-
-    Children of elements in skeleton are matched to descendants of
-    elements in the document.
-
-    Skeleton may only contain one root element.
-
-    `document` and `skeleton` may be either HTML strings or parsed etrees.
+    See `find_all` for details.
     """
     if is_string(document):
         document = html5parser.document_fromstring(document)

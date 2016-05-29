@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='ankle',
-    version='0.2.0',
+    version='0.3.0',
     description='Find elements in HTML by matching them with a skeleton',
     url='https://github.com/despawnerer/ankle',
     author='Aleksei Voronov',

@@ -1,6 +1,13 @@
 ankle Changelog
 ===============
 
+Version 0.3.0
+-------------
+
+- Order of elements in the skeleton is now significant
+- Text between elements is now significant
+- Old `match` API is gone
+
 Version 0.2.0
 -------------
 
