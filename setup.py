@@ -22,7 +22,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    py_modules=['ankle'],
+    packages=['ankle'],
     install_requires=[
         'lxml>=3',
         'html5lib>=0.9999999',
