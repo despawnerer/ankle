@@ -48,38 +48,38 @@ def find_iter(skeleton, document):
         skeleton = html5parser.fragment_fromstring(skeleton)
 
     for element in document.iterdescendants():
-        if is_node_like_bone(element, skeleton):
-            if match_bones(list(iter_child_nodes(skeleton)), element) is not None:
-                yield element
+        if node_matches_bone(element, skeleton):
+            yield element
 
 
-def match_bones(bone_list, element):
-    if not bone_list:
-        return []
-
-    bones_iter = iter(bone_list)
-
-    def process(bone, this_element):
-        for node in iter_child_nodes(this_element):
-            if is_node_like_bone(node, bone) and (is_string(bone) or match_bones(list(iter_child_nodes(bone)), node) is not None):
-                yield node
-                bone = next(bones_iter)
-            elif not is_string(node):
-                for subnode in process(bone, node):
-                    yield subnode
-
-    result = list(process(next(bones_iter), element))
-    return result if len(result) == len(bone_list) else None
-
-
-def is_node_like_bone(node, bone):
+def node_matches_bone(node, bone):
     if is_string(bone) or is_string(node):
         return node == bone
     else:
         return (
             node.tag == bone.tag and
-            all(bone.attrib[x] == node.attrib.get(x) for x in bone.attrib)
+            all(bone.attrib[x] == node.attrib.get(x) for x in bone.attrib) and
+            has_all_matching_elements(node, list(iter_child_nodes(bone))) is not None
         )
+
+
+def has_all_matching_elements(element, bone_list):
+    if not bone_list:
+        return []
+
+    bones_iter = iter(bone_list)
+
+    def process(element, bone):
+        for node in iter_child_nodes(element):
+            if node_matches_bone(node, bone):
+                yield node
+                bone = next(bones_iter)
+            elif not is_string(node):
+                for subnode in process(node, bone):
+                    yield subnode
+
+    result = list(process(element, next(bones_iter)))
+    return result if len(result) == len(bone_list) else None
 
 
 def iter_child_nodes(element):
