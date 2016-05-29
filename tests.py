@@ -2,6 +2,17 @@ import ankle
 import unittest
 
 
+class SimpleTestCase(unittest.TestCase):
+    def test(self):
+        document = '''
+            <form id="test1" class="form"></form>
+            <form id="test2" class="form"></form>
+        '''
+        skeleton = '<form class="form"></form>'
+        elements = ankle.find_all(skeleton, document)
+        self.assertTrue(True)
+
+
 class FindTestCase(unittest.TestCase):
     def test_returns_first_found_element_when_found(self):
         document = '''
@@ -138,6 +149,39 @@ class MatchingTestCase(unittest.TestCase):
                 <label for="name">Correct label</label>
                 <input name="name">
             </form>
+        '''
+        matches = ankle.find_all(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_match_by_order(self):
+        document = '''
+            <form id="test1">
+                <label for="name">Label</label>
+                <input name="name">
+            </form>
+            <form id="test2">
+                <input name="name">
+                <label for="name">Label</label>
+            </form>
+        '''
+        skeleton = '''
+            <form>
+                <label for="name">Label</label>
+                <input name="name">
+            </form>
+        '''
+        matches = ankle.find_all(skeleton, document)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].attrib['id'], 'test1')
+
+    def test_matches_skeleton_with_just_text(self):
+        document = '''
+            <h1 id="test1">Correct title</h1>
+            <h2 id="test2">Different title</h1>
+        '''
+        skeleton = '''
+            <h1>Correct title</h1>
         '''
         matches = ankle.find_all(skeleton, document)
         self.assertEqual(len(matches), 1)

@@ -47,39 +47,56 @@ def find_iter(skeleton, document):
     if isinstance(skeleton, string_types):
         skeleton = html5parser.fragment_fromstring(skeleton)
 
-    bones = skeleton.getchildren()
-    for element in find_bone_like_descendants(skeleton, document):
-        if match_bones(bones, element) is not None:
-            yield element
+    for element in document.iterdescendants():
+        if is_node_like_bone(element, skeleton):
+            if match_bones(list(iter_child_nodes(skeleton)), element) is not None:
+                yield element
 
 
-def match_bones(bones, element):
-    result = []
-    for bone in bones:
-        matches = find_bone_like_descendants(bone, element)
-        for match in matches:
-            if match_bones(bone.getchildren(), match) is not None:
-                result.append(match)
-                break
-        else:
-            return None
-    return result
+def match_bones(bone_list, element):
+    if not bone_list:
+        return []
+
+    bones_iter = iter(bone_list)
+
+    def process(bone, this_element):
+        for node in iter_child_nodes(this_element):
+            if is_node_like_bone(node, bone) and (is_string(bone) or match_bones(list(iter_child_nodes(bone)), node) is not None):
+                yield node
+                bone = next(bones_iter)
+            elif not is_string(node):
+                for subnode in process(bone, node):
+                    yield subnode
+
+    result = list(process(next(bones_iter), element))
+    return result if len(result) == len(bone_list) else None
 
 
-def find_bone_like_descendants(bone, parent):
-    attrs_path = ''.join(
-        '[@{attr}=\'{value}\']'.format(attr=attr, value=value)
-        for attr, value in bone.attrib.items()
-    )
-    path = './/{tag}{attrs}'.format(tag=bone.tag, attrs=attrs_path)
-    elements = parent.findall(path)
+def is_node_like_bone(node, bone):
+    if is_string(bone) or is_string(node):
+        return node == bone
+    else:
+        return (
+            node.tag == bone.tag and
+            all(bone.attrib[x] == node.attrib.get(x) for x in bone.attrib)
+        )
 
-    text = stripped(bone.text)
+
+def iter_child_nodes(element):
+    text = stripped(element.text)
     if text:
-        elements = [e for e in elements if stripped(e.text) == text]
+        yield text
 
-    return elements
+    for child in element:
+        yield child
+        tail = stripped(child.tail)
+        if tail:
+            yield tail
 
 
 def stripped(text):
     return text and text.strip()
+
+
+def is_string(value):
+    return isinstance(value, string_types)
