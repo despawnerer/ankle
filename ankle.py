@@ -59,13 +59,13 @@ def node_matches_bone(node, bone):
         return (
             node.tag == bone.tag and
             all(bone.attrib[x] == node.attrib.get(x) for x in bone.attrib) and
-            has_all_matching_elements(node, list(iter_child_nodes(bone))) is not None
+            has_all_matching_elements(node, list(iter_child_nodes(bone)))
         )
 
 
 def has_all_matching_elements(element, bone_list):
     if not bone_list:
-        return []
+        return True
 
     bones_iter = iter(bone_list)
 
@@ -79,7 +79,7 @@ def has_all_matching_elements(element, bone_list):
                     yield subnode
 
     result = list(process(element, next(bones_iter)))
-    return result if len(result) == len(bone_list) else None
+    return len(result) == len(bone_list)
 
 
 def iter_child_nodes(element):
