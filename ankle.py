@@ -68,18 +68,24 @@ def has_all_matching_elements(element, bone_list):
         return True
 
     bones_iter = iter(bone_list)
+    nodes_iters = [iter_child_nodes(element)]
+    bone = next(bones_iter)
+    while nodes_iters:
+        try:
+            node = next(nodes_iters[-1])
+        except StopIteration:
+            nodes_iters.pop()
+            continue
 
-    def process(element, bone):
-        for node in iter_child_nodes(element):
-            if node_matches_bone(node, bone):
-                yield node
+        if node_matches_bone(node, bone):
+            try:
                 bone = next(bones_iter)
-            elif not is_string(node):
-                for subnode in process(node, bone):
-                    yield subnode
-
-    result = list(process(element, next(bones_iter)))
-    return len(result) == len(bone_list)
+            except StopIteration:
+                return True
+        elif not is_string(node):
+            nodes_iters.append(iter_child_nodes(node))
+    else:
+        return False
 
 
 def iter_child_nodes(element):
