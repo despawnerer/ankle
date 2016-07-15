@@ -9,8 +9,7 @@ class SimpleTestCase(unittest.TestCase):
             <form id="test2" class="form"></form>
         '''
         skeleton = '<form class="form"></form>'
-        elements = ankle.find_all(skeleton, document)
-        self.assertTrue(True)
+        ankle.find_all(skeleton, document)
 
 
 class FindTestCase(unittest.TestCase):
