@@ -3,7 +3,7 @@ import unittest
 
 
 class SimpleTestCase(unittest.TestCase):
-    def test(self):
+    def test_works(self):
         document = '''
             <form id="test1" class="form"></form>
             <form id="test2" class="form"></form>
