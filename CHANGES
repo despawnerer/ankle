@@ -1,6 +1,12 @@
 ankle Changelog
 ===============
 
+Version 0.4.0
+-------------
+
+- lxml is no longer a dependency
+- Now works with more modern html5lib
+
 Version 0.3.0
 -------------
 
