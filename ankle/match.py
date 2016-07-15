@@ -8,20 +8,22 @@ def node_matches_bone(node, bone):
         return (
             node.tag == bone.tag and
             all(bone.attrib[x] == node.attrib.get(x) for x in bone.attrib) and
-            has_all_matching_elements(node, list(iter_child_nodes(bone)))
+            has_all_matching_elements(node, iter_child_nodes(bone))
         )
 
 
-def has_all_matching_elements(element, bone_list):
-    if not bone_list:
-        return True
-
+def has_all_matching_elements(element, bones):
     # this is sort of convoluted in comparison with recursive version, but:
     # - easy to break out once we've found all the matching elements
     # - no possibility of recursion errors (documents may be very large)
-    bones_iter = iter(bone_list)
+    bones_iter = iter(bones)
     nodes_iters = [iter_child_nodes(element)]
-    bone = next(bones_iter)
+
+    try:
+        bone = next(bones_iter)
+    except StopIteration:
+        return True
+
     while nodes_iters:
         try:
             node = next(nodes_iters[-1])
