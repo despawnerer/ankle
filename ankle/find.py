@@ -1,4 +1,4 @@
-from lxml.html import html5parser
+import html5lib
 
 from .utils import is_string
 from .match import node_matches_bone
@@ -41,10 +41,13 @@ def find_iter(skeleton, document):
     See `find_all` for details.
     """
     if is_string(document):
-        document = html5parser.document_fromstring(document)
+        document = html5lib.parse(document)
     if is_string(skeleton):
-        skeleton = html5parser.fragment_fromstring(skeleton)
+        fragment = html5lib.parseFragment(skeleton)
+        if len(fragment) != 1:
+            raise ValueError("Skeleton must have exactly one root element.")
+        skeleton = fragment[0]
 
-    for element in document.iterdescendants():
+    for element in document.iter():
         if node_matches_bone(element, skeleton):
             yield element

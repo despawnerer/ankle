@@ -24,7 +24,6 @@ setup(
     ],
     packages=['ankle'],
     install_requires=[
-        'lxml>=3',
         'html5lib>=0.9999999',
         'six>=1.0'
     ]

@@ -11,6 +11,12 @@ class SimpleTestCase(unittest.TestCase):
         skeleton = '<form class="form"></form>'
         ankle.find_all(skeleton, document)
 
+    def test_disallows_skeleton_with_multiple_elements(self):
+        document = '<html></html>'
+        skeleton = '<p></p><p></p>'
+        with self.assertRaises(ValueError):
+            ankle.find_all(skeleton, document)
+
 
 class FindTestCase(unittest.TestCase):
     def test_returns_first_found_element_when_found(self):
