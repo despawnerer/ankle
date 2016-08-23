@@ -1,6 +1,10 @@
 ankle Changelog
 ===============
 
+Version 0.4.1
+-------------
+- Lock html5lib version for now, until it's stable. Latest releases broke things.
+
 Version 0.4.0
 -------------
 
